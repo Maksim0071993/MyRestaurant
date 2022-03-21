@@ -1,0 +1,36 @@
+﻿@model UserViewModel
+
+<html>
+<head>
+    <title>Registration</title>
+</head>
+<body>
+    <h2>Регистрация</h2>
+    <br />
+    <br />
+    <form method="post" action=" /Registration/Index">
+
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <p>
+            <div class="col-md-6">
+                <label class="form-label">Телефон</label><br />
+                <input type="text" placeholder="Введите номер телефона" name="@nameof(UserViewModel.PhoneNumber)" class=" form-control" /> <br />
+            </div>
+        </p>
+        <p>
+            <div class="col-md-6">
+                <label class="form-label">Пароль</label><br />
+                <input type="password" placeholder="Введите пароль" name="@nameof(UserViewModel.Password)" class=" form-control" /> <br />
+            </div>
+        </p>
+        <p>
+            <div class="col-md-6">
+                <label class="form-label">Подтверждение пароля</label><br />
+                <input required="required" type="password" placeholder="Подтвердите пароль" name="@nameof(UserViewModel.ConfirmPassword)" class=" form-control" /><br />
+            </div>
+        </p>
+
+        <p><input type="submit" class="btn-primary" value="Зарегистрироваться"></p>
+    </form>
+</body>
+</html>

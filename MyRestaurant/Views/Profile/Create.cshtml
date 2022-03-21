@@ -1,0 +1,17 @@
+﻿@model UserProfileViewModel
+
+<div>
+    @using (Html.BeginForm("Create", "Profile", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <label class="form-label"> Имя </label>
+        <input required="required" type="text" name="@nameof(UserProfileViewModel.Name)" class="form-control">
+        <br />
+        <br />
+        <label class="form-label"> Адрес </label>
+        <input type="text" name="@nameof(UserProfileViewModel.Address)" class="form-control">
+        <br />
+        <br />
+        <p><input type="submit" value="Создать профиль" class="btn-primary"></p>
+    }
+</div>

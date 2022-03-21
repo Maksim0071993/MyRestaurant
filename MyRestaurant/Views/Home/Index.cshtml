@@ -1,0 +1,18 @@
+﻿@model List<MyRestaurant.BusinessLogic.Models.DishModel>
+
+<html>
+<head>
+    <title> Main</title>
+</head>
+<body>
+    <div class="row mt-5 mb-2">
+        @foreach (var dish in Model)
+        {
+            <h2>@dish.Photo</h2>
+            <h1>@dish.Name</h1>
+            <p>@dish.Price</p>
+            <p>@dish.Weight</p>
+        }
+    </div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+﻿@using MyRestaurant.Presentation.Models
+@model UserViewModel
+<html>
+<head>
+    <title>Вход в систему</title>
+</head>
+<body>
+    <h2>Вход в систему</h2>
+
+    <form method="post" action=" /Login/Index">
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <div class="col-md-6">
+            <label for="username" class="form-label">Номер телефона</label>
+            <input required="required" type="text" name="@nameof(UserViewModel.PhoneNumber)" class="form-control" id="username">
+        </div>
+        <div class="col-md-6">
+            <label for="password" class="form-label">Пароль</label>
+            <input required="required" type="password" name="@nameof(UserViewModel.Password)" class="form-control" id="password">
+        </div>
+        <br />
+        <p><input type="submit" value="Войти" class="btn btn-primary"></p>
+    </form>
+</body>
+</html>
