@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyRestaurant.Common;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,5 +10,7 @@ namespace MyRestaurant.DataAccess.Models
         public int Id { get; set; }
         public string PhoneNumber { get; set; }
         public string Password { get; set; }
+        public Roles Role { get; set; }
+
     }
 }

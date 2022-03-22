@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using MyRestaurant.BusinessLogic.Interfaces;
+using MyRestaurant.Common;
 using MyRestaurant.Presentation.Models;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace MyRestaurant.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Index([FromForm] UserViewModel model)
         {
+            model.Role = Common.Roles.User;
             var destObject = model.Adapt<MyRestaurant.BusinessLogic.Models.UserModel>();
             var resultVerivicationEmail = _userService.PhoneVerifaction(model.PhoneNumber);
             if (resultVerivicationEmail == true)
@@ -51,16 +53,17 @@ namespace MyRestaurant.Presentation.Controllers
             else
             {
                 var result = _userService.Register(destObject);
-                await Authenticate(result);
+                await Authenticate(result,destObject.Role);
                 return RedirectToAction("Create", "Profile");
             }
             return View();
         }
-        private async Task Authenticate(int userId)
+        private async Task Authenticate(int userId, Roles role)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userId.ToString())
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userId.ToString()),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, role.ToString()),
             };
 
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);

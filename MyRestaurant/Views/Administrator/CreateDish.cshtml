@@ -1,0 +1,44 @@
+﻿@model DishViewModel
+
+<div>
+    @using (Html.BeginForm("CreateDish", "Administrator", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <label class="form-label"> Имя </label>
+        <input required="required" type="text" name="@nameof(DishViewModel.Name)" class="form-control">
+        <br />
+        <br />
+        <label class="form-label"> Фамилия </label>
+        <input type="number" name="@nameof(DishViewModel.Price)" class="form-control">
+
+        <br />
+        <br />
+        @*<label class="form-label"> Возраст </label>
+        <input required="required" type="text" name="@nameof(ProfileModel.Age)" class="form-control">
+
+        <br />
+        <br />
+        <p style="color:black; font-size:14px"> Пол:</p>
+
+        @Html.DropDownListFor(m => m.Sex, Enum.GetNames(typeof(DatingApp.Common.Sex)).Select(e => new SelectListItem { Value = e, Text = e }))
+        <br />
+        <br />
+        <p style="color:black; font-size:14px"> Город:</p>
+
+        @Html.DropDownListFor(m => m.CityId, (ViewBag.Cities as DatingApp.BusinesLogic.BusinessModel.LookupValueModel[]).Select(e => new SelectListItem { Value = e.Id.ToString(), Text = e.Title }))
+        <br />
+        <br />
+        <p style="color:black; font-size:14px"> Ориентация:</p>
+
+        @Html.DropDownListFor(m => m.Orientation, Enum.GetNames(typeof(DatingApp.Common.Orientations)).Select(e => new SelectListItem { Value = e, Text = e }))
+        <br />
+        <br />
+        <p style="color:black; font-size:14px"> О себе:</p> @Html.TextBoxFor(m => m.AboutMe)
+        <br />
+        <br />*@
+        <input type="file" name="UploadedFile" id="UploadedFile" />
+        <br />
+        <br />
+        <p><input type="submit" value="Создать профиль" class="btn-primary"></p>
+    }
+</div>
