@@ -45,8 +45,8 @@ namespace MyRestaurant.Presentation.Controllers
                     model.Photo = Convert.ToBase64String(fileBytes);
                 }
             }
-            var _destObject = model.Adapt<MyRestaurant.BusinessLogic.Models.DishModel>();
-            _administratorService.CreateDish(_destObject);
+            var dishModel = model.Adapt<MyRestaurant.BusinessLogic.Models.DishModel>();
+            _administratorService.CreateDish(dishModel);
             return View();
         }
     }

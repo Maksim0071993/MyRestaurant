@@ -36,7 +36,7 @@ namespace MyRestaurant.Presentation.Controllers
         public async Task<IActionResult> Index([FromForm] UserViewModel model)
         {
             model.Role = Common.Roles.User;
-            var destObject = model.Adapt<MyRestaurant.BusinessLogic.Models.UserModel>();
+            var userModel = model.Adapt<MyRestaurant.BusinessLogic.Models.UserModel>();
             var resultVerivicationEmail = _userService.PhoneVerifaction(model.PhoneNumber);
             if (resultVerivicationEmail == true)
             {
@@ -52,8 +52,8 @@ namespace MyRestaurant.Presentation.Controllers
             }
             else
             {
-                var result = _userService.Register(destObject);
-                await Authenticate(result,destObject.Role);
+                var result = _userService.Register(userModel);
+                await Authenticate(result,userModel.Role);
                 return RedirectToAction("Create", "Profile");
             }
             return View();

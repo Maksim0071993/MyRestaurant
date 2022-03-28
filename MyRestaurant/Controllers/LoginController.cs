@@ -34,11 +34,11 @@ namespace MyRestaurant.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Index([FromForm] UserViewModel model)
         {
-            var destObject = model.Adapt<MyRestaurant.BusinessLogic.Models.UserModel>();
-            var result = _userService.SearchUser(destObject);
+            var userModel = model.Adapt<MyRestaurant.BusinessLogic.Models.UserModel>();
+            var result = _userService.SearchUser(userModel);
             if (result != null)
             {
-                await Authenticate(result.Id,destObject.Role);
+                await Authenticate(result.Id,userModel.Role);
                 return RedirectToAction("Index", "Home");
             }
             else
