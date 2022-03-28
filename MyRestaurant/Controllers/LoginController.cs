@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using MyRestaurant.BusinessLogic.Interfaces;
+using MyRestaurant.Common;
 using MyRestaurant.Presentation.Models;
 using System;
 using System.Collections.Generic;
@@ -33,11 +34,11 @@ namespace MyRestaurant.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Index([FromForm] UserViewModel model)
         {
-            var destObject = model.Adapt<MyRestaurant.BusinessLogic.Models.UserModel>();
-            var result = _userService.SearchUser(destObject);
+            var userModel = model.Adapt<MyRestaurant.BusinessLogic.Models.UserModel>();
+            var result = _userService.SearchUser(userModel);
             if (result != null)
             {
-                await Authenticate(result.Id);
+                await Authenticate(result.Id,userModel.Role);
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -46,11 +47,12 @@ namespace MyRestaurant.Presentation.Controllers
             }
             return View("Index", "Registration");
         }
-        private async Task Authenticate(int userId)
+        private async Task Authenticate(int userId, Roles role)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userId.ToString())
+                new Claim(ClaimsIdentity.DefaultNameClaimType, userId.ToString()),
+                new Claim(ClaimsIdentity.DefaultNameClaimType, role.ToString()),
             };
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
