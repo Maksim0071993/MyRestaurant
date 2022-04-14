@@ -10,7 +10,6 @@ namespace MyRestaurant.DataAccess.Repository
         private readonly MyRestaurantContext restaurantContext;
         private readonly IDishRepository dishRepository;
         private readonly IOrderRepository orderRepository;
-        private readonly IIngridientRepository ingridientRepository;
         private readonly IUserRepository userRepository;
         private readonly IUserProfileRepository userProfileRepository;
 
@@ -18,7 +17,6 @@ namespace MyRestaurant.DataAccess.Repository
             MyRestaurantContext restaurantContext,
             IDishRepository dishRepository,
             IOrderRepository orderRepository,
-            IIngridientRepository ingridientRepository,
             IUserRepository userRepository,
             IUserProfileRepository userProfileRepository
             )
@@ -27,7 +25,6 @@ namespace MyRestaurant.DataAccess.Repository
             this.restaurantContext = restaurantContext;
             this.dishRepository = dishRepository;
             this.orderRepository = orderRepository;
-            this.ingridientRepository = ingridientRepository;
             this.userRepository = userRepository;
         }
         public IDishRepository Dish
@@ -37,13 +34,7 @@ namespace MyRestaurant.DataAccess.Repository
                 return this.dishRepository;
             }
         }
-        public IIngridientRepository Ingridient
-        {
-            get
-            {
-                return this.ingridientRepository;
-            }
-        }
+
         public IOrderRepository Order
         {
             get

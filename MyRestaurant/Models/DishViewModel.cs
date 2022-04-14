@@ -11,7 +11,9 @@ namespace MyRestaurant.Presentation.Models
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string Ingridients { get; set; }
-        public int Weight { get; set; }
+        public decimal Weight { get; set; }
         public string Photo { get; set; }
+        public string PhotoPath { get; set; }
+        public string Ingridient { get; set; }
     }
 }

@@ -2,15 +2,15 @@
 
 namespace MyRestaurant.DataAccess.Migrations
 {
-    public partial class UpdateDatabase : Migration
+    public partial class UpdateDishModel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "Name",
-                table: "UserProfiles",
-                type: "nvarchar(max)",
-                nullable: true,
+            migrationBuilder.AlterColumn<decimal>(
+                name: "Weight",
+                table: "Dishes",
+                type: "decimal(18,2)",
+                nullable: false,
                 oldClrType: typeof(int),
                 oldType: "int");
         }
@@ -18,14 +18,12 @@ namespace MyRestaurant.DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<int>(
-                name: "Name",
-                table: "UserProfiles",
+                name: "Weight",
+                table: "Dishes",
                 type: "int",
                 nullable: false,
-                defaultValue: 0,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)",
-                oldNullable: true);
+                oldClrType: typeof(decimal),
+                oldType: "decimal(18,2)");
         }
     }
 }

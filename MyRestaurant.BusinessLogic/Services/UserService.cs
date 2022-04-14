@@ -1,4 +1,5 @@
 ﻿
+using AutoMapper;
 using Mapster;
 using MyRestaurant.BusinessLogic.Interfaces;
 using MyRestaurant.BusinessLogic.Models;
@@ -10,26 +11,26 @@ namespace MyRestaurant.BusinessLogic.Services
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
-        public UserService(IUnitOfWork unitOfWork)
+        private readonly IMapper _mapper;
+        public UserService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
         public int Register(UserModel model)
         {
-            
-            var destObject = model.Adapt<MyRestaurant.DataAccess.Models.User>();
-            _unitOfWork.User.Add(destObject);
+            var mappedUser = _mapper.Map<MyRestaurant.DataAccess.Models.User>(model);
+            _unitOfWork.User.Add(mappedUser);
             _unitOfWork.Save();
-            return destObject.Id;
+            return mappedUser.Id;
         }
         public UserModel SearchUser(UserModel model)
         {
-            var destObject = model.Adapt<MyRestaurant.DataAccess.Models.User>();
             var user = _unitOfWork.User.Get(x => x.PhoneNumber == model.PhoneNumber && x.Password == model.Password).FirstOrDefault();
             UserModel result = null;
             if (user != null)
             {
-                result = model;
+                result = _mapper.Map<UserModel>(user);
             }
             return result;
         }

@@ -31,5 +31,11 @@ namespace MyRestaurant.DataAccess.Repository
             var dishes = _restaurantContext.Dishes.ToList();
             return dishes;
         }
+        public Dish GetDishById(int id)
+        {
+            var dish = _restaurantContext.Dishes.Where(x => x.Id == id).FirstOrDefault();
+
+            return dish;
+        }
     }
 }

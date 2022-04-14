@@ -10,8 +10,8 @@ using MyRestaurant.DataAccess;
 namespace MyRestaurant.DataAccess.Migrations
 {
     [DbContext(typeof(MyRestaurantContext))]
-    [Migration("20220322160646_UpdateDatabase")]
-    partial class UpdateDatabase
+    [Migration("20220409102307_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,21 +20,6 @@ namespace MyRestaurant.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.15")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("DishIngridient", b =>
-                {
-                    b.Property<int>("DishesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IngridientsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DishesId", "IngridientsId");
-
-                    b.HasIndex("IngridientsId");
-
-                    b.ToTable("DishIngridient");
-                });
 
             modelBuilder.Entity("DishOrder", b =>
                 {
@@ -58,10 +43,16 @@ namespace MyRestaurant.DataAccess.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Ingridient")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Photo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhotoPath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
@@ -73,24 +64,6 @@ namespace MyRestaurant.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Dishes");
-                });
-
-            modelBuilder.Entity("MyRestaurant.DataAccess.Models.Ingridient", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Weight")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Ingridients");
                 });
 
             modelBuilder.Entity("MyRestaurant.DataAccess.Models.Order", b =>
@@ -106,16 +79,21 @@ namespace MyRestaurant.DataAccess.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Sum")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -133,6 +111,9 @@ namespace MyRestaurant.DataAccess.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -141,39 +122,14 @@ namespace MyRestaurant.DataAccess.Migrations
             modelBuilder.Entity("MyRestaurant.DataAccess.Models.UserProfile", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("UserProfiles");
-                });
-
-            modelBuilder.Entity("DishIngridient", b =>
-                {
-                    b.HasOne("MyRestaurant.DataAccess.Models.Dish", null)
-                        .WithMany()
-                        .HasForeignKey("DishesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MyRestaurant.DataAccess.Models.Ingridient", null)
-                        .WithMany()
-                        .HasForeignKey("IngridientsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("DishOrder", b =>
@@ -191,15 +147,31 @@ namespace MyRestaurant.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MyRestaurant.DataAccess.Models.UserProfile", b =>
+            modelBuilder.Entity("MyRestaurant.DataAccess.Models.Order", b =>
                 {
                     b.HasOne("MyRestaurant.DataAccess.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MyRestaurant.DataAccess.Models.UserProfile", b =>
+                {
+                    b.HasOne("MyRestaurant.DataAccess.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MyRestaurant.DataAccess.Models.User", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

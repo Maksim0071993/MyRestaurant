@@ -14,13 +14,13 @@
         <p>
             <div class="col-md-6">
                 <label class="form-label">Телефон</label><br />
-                <input type="text" placeholder="Введите номер телефона" name="@nameof(UserViewModel.PhoneNumber)" class=" form-control" /> <br />
+                <input required="required" type="text" placeholder="Введите номер телефона" name="@nameof(UserViewModel.PhoneNumber)" class=" form-control" /> <br />
             </div>
         </p>
         <p>
             <div class="col-md-6">
                 <label class="form-label">Пароль</label><br />
-                <input type="password" placeholder="Введите пароль" name="@nameof(UserViewModel.Password)" class=" form-control" /> <br />
+                <input required="required" type="password" placeholder="Введите пароль" name="@nameof(UserViewModel.Password)" class=" form-control" /> <br />
             </div>
         </p>
         <p>
@@ -30,7 +30,7 @@
             </div>
         </p>
 
-        <p><input type="submit" class="btn-primary" value="Зарегистрироваться"></p>
+        <p><input type="submit" class="btn btn-info" value="Зарегистрироваться"></p>
     </form>
 </body>
 </html>

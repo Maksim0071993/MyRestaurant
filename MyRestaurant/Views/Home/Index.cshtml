@@ -8,11 +8,21 @@
     <div class="row mt-5 mb-2">
         @foreach (var dish in Model)
         {
-            <h2>@dish.Photo</h2>
-            <h1>@dish.Name</h1>
-            <p>@dish.Price</p>
-            <p>@dish.Weight</p>
+            <div class="col-lg-4">
+                <form method="post" action=" /Home/Index">
+                    <img src="@Url.Content(dish.PhotoPath)" class="img-thumbnail" width="350">
+                    <br />
+                    <h1> @dish.Name</h1>
+                    <br />
+                    <p><label>Цена:  </label>@dish.Price BYN</p>
+                    <p><label>Вес:  </label>@dish.Weight кг</p>
+                    <p><label>Состав:  </label>@dish.Ingridient</p>
+                    <p><input name="Id" value="@dish.Id" hidden></p>
+                    <p><input type="submit" class="btn btn-info" value="Заказать"></p>
+                </form>
+            </div>
         }
+        <br />
     </div>
 </body>
 </html>

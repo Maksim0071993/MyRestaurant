@@ -1,8 +1,10 @@
-﻿using Mapster;
+﻿using AutoMapper;
+using Mapster;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using MyRestaurant.BusinessLogic.Interfaces;
+using MyRestaurant.BusinessLogic.Models;
 using MyRestaurant.Common;
 using MyRestaurant.Presentation.Models;
 using System;
@@ -16,9 +18,11 @@ namespace MyRestaurant.Presentation.Controllers
     public class LoginController : Controller
     {
         private readonly IUserService _userService;
-        public LoginController(IUserService userService)
+        private readonly IMapper _mapper;
+        public LoginController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -34,11 +38,11 @@ namespace MyRestaurant.Presentation.Controllers
         [HttpPost]
         public async Task<IActionResult> Index([FromForm] UserViewModel model)
         {
-            var userModel = model.Adapt<MyRestaurant.BusinessLogic.Models.UserModel>();
+            var userModel = _mapper.Map<UserModel>(model);
             var result = _userService.SearchUser(userModel);
             if (result != null)
             {
-                await Authenticate(result.Id,userModel.Role);
+                await Authenticate(result.Id,result.Role);
                 return RedirectToAction("Index", "Home");
             }
             else
@@ -48,11 +52,11 @@ namespace MyRestaurant.Presentation.Controllers
             return View("Index", "Registration");
         }
         private async Task Authenticate(int userId, Roles role)
-        {
+        {  
             var claims = new List<Claim>
             {
                 new Claim(ClaimsIdentity.DefaultNameClaimType, userId.ToString()),
-                new Claim(ClaimsIdentity.DefaultNameClaimType, role.ToString()),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, role.ToString()),
             };
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));

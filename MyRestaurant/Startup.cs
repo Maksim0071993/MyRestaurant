@@ -10,6 +10,7 @@ using MyRestaurant.BusinessLogic.Services;
 using MyRestaurant.DataAccess;
 using MyRestaurant.DataAccess.Interface;
 using MyRestaurant.DataAccess.Repository;
+using System;
 
 namespace MyRestaurant
 {
@@ -29,7 +30,6 @@ namespace MyRestaurant
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IDishRepository, DishRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
-            services.AddScoped<IIngridientRepository, IngridientRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserProfileRepository, UserProfileRepository>();
             services.AddScoped<IUserService, UserService>();
@@ -38,6 +38,7 @@ namespace MyRestaurant
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IAdministratorService, AdministratorService>();
             services.AddScoped<MyRestaurantContext>();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(options =>
             {

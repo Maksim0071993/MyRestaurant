@@ -10,5 +10,6 @@ namespace MyRestaurant.DataAccess.Interface
         public List<Dish> Get(Func<Dish, bool> func);
         public void Add(Dish dish);
         public List<Dish> GetAll();
+        public Dish GetDishById(int id);
     }
 }

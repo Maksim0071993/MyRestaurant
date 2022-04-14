@@ -7,7 +7,12 @@ namespace MyRestaurant.BusinessLogic.Interfaces
 {
     public interface IOrderService
     {
-        public int CreateOrder(OrderModel order);
+        public OrderModel CreateOrder(int userId);
         public OrderModel GetOrderById(int id);
+        public OrderModel GetNotCompletedOrder(int userId);
+        public bool AddDishToOrder(int orderId, int dishId);
+        public List<DishModel> GetDishesFromNotComletedOrder(int id);
+        public void ConfirmOrder(OrderModel model);
+        public OrderModel DeleteDishFromOrder(int dishId, int userId);
     }
 }

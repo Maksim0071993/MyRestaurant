@@ -10,5 +10,7 @@ namespace MyRestaurant.DataAccess.Interface
         public List<Order> GetAll();
         public void Add(Order order);
         public List<Order> Get(Func<Order, bool> func);
+        public Order GetOrderById(int id);
+        public void Update(Order order);
     }
 }

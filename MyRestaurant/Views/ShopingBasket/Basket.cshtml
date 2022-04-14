@@ -1,0 +1,51 @@
+﻿@model MyRestaurant.BusinessLogic.Models.OrderModel
+
+<html>
+<head>
+    <title> Basket</title>
+</head>
+<body>
+
+    <div class="row mt-5 mb-2">          
+            <div class="col-lg-4">
+                <form method="post" action=" /ShopingBasket/Basket">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Фото</th>
+                                <th scope="col">Блюдо</th>
+                                <th scope="col">Вес</th>
+                                <th scope="col">Цена</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var dish in Model.Dishes)
+                            {
+                                <tr>
+                                    <td><img src="@Url.Content(dish.PhotoPath)" class="img-thumbnail" width="100"></td>
+                                    <td>@dish.Name</td>
+                                    <td>@dish.Weight</td>
+                                    <td>@dish.Price</td>
+                                    <td><button name="@dish.Id" class="" onclick="" value="x"></button></td>
+                                </tr>
+                            }
+                            
+                        </tbody>
+                            </table>
+                    <br />
+                    <p><label>Сумма заказа:</label> @Model.Sum BYN</p>
+                    <input type="text" name="@nameof(OrderModel.Sum)" hidden value="@Model.Sum" />
+                    <p><label>Телефон:</label> @Model.PhoneNumber</p>
+                    <input required="required" type="text" placeholder="Введите номер телефона" name="@nameof(OrderModel.PhoneNumber)" class=" form-control" /> <br />
+                    <p><label>Адрес:  </label>@Model.Address</p>
+                    <input required="required" type="text" placeholder="Введите адрес" name="@nameof(OrderModel.Address)" class=" form-control" /> <br />
+                    <input hidden name ="@nameof(OrderModel.Id)" value="@Model.Id" />
+                    <p><input type="submit" class="btn btn-info" value="Подтвердить заказ"></p>
+                </form>
+            </div>
+        <br />
+    </div>
+</body>
+</html>

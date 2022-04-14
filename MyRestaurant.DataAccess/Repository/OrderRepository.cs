@@ -1,4 +1,5 @@
-﻿using MyRestaurant.DataAccess;
+﻿using Microsoft.EntityFrameworkCore;
+using MyRestaurant.DataAccess;
 using MyRestaurant.DataAccess.Interface;
 using MyRestaurant.DataAccess.Models;
 using System;
@@ -16,7 +17,7 @@ namespace MyRestaurant.DataAccess.Repository
         }
         public List<Order> Get(Func<Order, bool> func)
         {
-            var dishes = _restaurantContext.Orders.Where(func).ToList();
+            var dishes = _restaurantContext.Orders.Include(o => o.Dishes).Where(func).ToList();
             return dishes;
         }
 
@@ -24,11 +25,20 @@ namespace MyRestaurant.DataAccess.Repository
         {         
             _restaurantContext.Orders.Add(order);
         }
+        public void Update(Order order)
+        {
+            _restaurantContext.Orders.Update(order);
+        }
 
         public List<Order> GetAll()
         {
             var allOrders = _restaurantContext.Orders.ToList();
             return allOrders;
+        }
+        public Order GetOrderById(int id)
+        {
+            var order = _restaurantContext.Orders.Include(o => o.Dishes).Where(x => x.Id == id).FirstOrDefault();
+                return order;
         }
     }
 }

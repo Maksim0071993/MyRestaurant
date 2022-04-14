@@ -8,7 +8,8 @@ namespace MyRestaurant.BusinessLogic.Interfaces
     public interface IUserService
     {
         public int Register(UserModel model);
-        public bool PhoneVerifaction(string phoneNumber);
         public UserModel SearchUser(UserModel model);
+        public bool PhoneVerifaction(string phoneNumber);
+       
     }
 }

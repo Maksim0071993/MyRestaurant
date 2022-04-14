@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using AutoMapper;
+using Mapster;
 using MyRestaurant.BusinessLogic.Interfaces;
 using MyRestaurant.BusinessLogic.Models;
 using MyRestaurant.DataAccess.Interface;
@@ -9,45 +10,26 @@ namespace MyRestaurant.BusinessLogic.Services
     public class UserProfileService : IUserProfileService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public UserProfileService (IUnitOfWork unitOfWork)
+        public UserProfileService (IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public int CreateProfile(UserProfileModel user)
         {
-            var destObject = user.Adapt<MyRestaurant.DataAccess.Models.UserProfile>();
-            _unitOfWork.UserProfile.Add(destObject);
+            var mapeedUser = _mapper.Map<MyRestaurant.DataAccess.Models.UserProfile>(user);
+            _unitOfWork.UserProfile.Add(mapeedUser);
             _unitOfWork.Save();
-            return destObject.Id;
+            return mapeedUser.Id;
         }
-        public UserProfileModel SearchUser(UserProfileModel model)
-        {
-            var destObject = model.Adapt<MyRestaurant.DataAccess.Models.UserProfile>();
-            var user = _unitOfWork.UserProfile.Get(x => x.Address == destObject.Address && x.Name == destObject.Name).FirstOrDefault();
-            UserProfileModel result = null;
-            if (user != null)
-            {
-                result = model;
-            }
-            return result;
+        public UserProfileModel SearchUser(int id)
+        { 
+            var user = _unitOfWork.UserProfile.Get(x => x.Id == id).FirstOrDefault();
+            var mapeedUser = _mapper.Map<UserProfileModel>(user);
+            return mapeedUser;
         }
-        
-        public bool PhoneVerifaction(string phoneNumber)
-        {
-            var user = _unitOfWork.User.Get(x => x.PhoneNumber == phoneNumber).FirstOrDefault();
-            bool result;
-            if (user != null)
-            {
-                result = true;
-            }
-            else
-            {
-                result = false;
-            }
-            return result;
-        }
-
     }
 }

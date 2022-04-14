@@ -9,7 +9,6 @@ namespace MyRestaurant.DataAccess.Interface
         IOrderRepository Order { get; }
         IDishRepository Dish { get; }
         IUserRepository User { get; }
-        IIngridientRepository Ingridient { get; }
         IUserProfileRepository UserProfile { get; }
         void Save();
     }

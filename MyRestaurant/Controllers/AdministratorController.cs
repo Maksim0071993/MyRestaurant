@@ -1,30 +1,28 @@
-﻿using Mapster;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyRestaurant.BusinessLogic.Interfaces;
+using MyRestaurant.BusinessLogic.Models;
 using MyRestaurant.Presentation.Models;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyRestaurant.Presentation.Controllers
 {
-    //[Authorize(Roles = typeof (Common.Roles.Administrator))]
+    [Authorize(Roles ="Administrator")]
     public class AdministratorController : Controller
     {
         private readonly IAdministratorService _administratorService;
-        public AdministratorController(IAdministratorService administratorService)
+        private readonly IWebHostEnvironment _appEnvironment;
+        private readonly IMapper _mapper;
+
+        public AdministratorController(IAdministratorService administratorService, IWebHostEnvironment appEnvironment, IMapper mapper)
         {
             _administratorService = administratorService;
-        }
-
-        [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
+            _appEnvironment = appEnvironment;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -34,18 +32,20 @@ namespace MyRestaurant.Presentation.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateDish([FromForm] DishViewModel model, IFormFile uploadedFile)
+        public async Task<IActionResult> CreateDish([FromForm] DishViewModel model, IFormFile uploadedFile)
         {
+            var dishModel = _mapper.Map<DishModel>(model);
             if (uploadedFile != null)
-            {
-                using (var ms = new MemoryStream())
+            {  
+                string path = "/Photo/" + uploadedFile.FileName;
+                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
                 {
-                    uploadedFile.CopyTo(ms);
-                    var fileBytes = ms.ToArray();
-                    model.Photo = Convert.ToBase64String(fileBytes);
+                    await uploadedFile.CopyToAsync(fileStream);
                 }
+                dishModel.Photo = uploadedFile.FileName;
+                dishModel.PhotoPath = path;      
             }
-            var dishModel = model.Adapt<MyRestaurant.BusinessLogic.Models.DishModel>();
+            
             _administratorService.CreateDish(dishModel);
             return View();
         }

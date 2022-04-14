@@ -1,8 +1,10 @@
-﻿using Mapster;
+﻿using AutoMapper;
+using Mapster;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using MyRestaurant.BusinessLogic.Interfaces;
+using MyRestaurant.BusinessLogic.Models;
 using MyRestaurant.Common;
 using MyRestaurant.Presentation.Models;
 using System;
@@ -16,10 +18,12 @@ namespace MyRestaurant.Presentation.Controllers
     public class RegistrationController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
-        public RegistrationController(IUserService userService)
+        public RegistrationController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -36,7 +40,7 @@ namespace MyRestaurant.Presentation.Controllers
         public async Task<IActionResult> Index([FromForm] UserViewModel model)
         {
             model.Role = Common.Roles.User;
-            var userModel = model.Adapt<MyRestaurant.BusinessLogic.Models.UserModel>();
+            var userModel = _mapper.Map<UserModel>(model);
             var resultVerivicationEmail = _userService.PhoneVerifaction(model.PhoneNumber);
             if (resultVerivicationEmail == true)
             {
@@ -45,10 +49,6 @@ namespace MyRestaurant.Presentation.Controllers
             else if (model.Password != model.ConfirmPassword)
             {
                 ModelState.AddModelError("", "Пароли должны совпадать");
-            }
-            else if (model.PhoneNumber == null)
-            {
-                ModelState.AddModelError("", "Поле 'Номер телефона' должно быть заполнено");
             }
             else
             {

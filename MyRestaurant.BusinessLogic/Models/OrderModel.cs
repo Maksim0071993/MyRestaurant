@@ -13,5 +13,6 @@ namespace MyRestaurant.BusinessLogic.Models
         public DateTime Date { get; set; }
         public string Name { get; set; }
         public List<DishModel> Dishes { get; set; }
+        public bool IsCompleted { get; set; }
     }
 }

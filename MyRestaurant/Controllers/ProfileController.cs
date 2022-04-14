@@ -2,25 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using MyRestaurant.BusinessLogic.Interfaces;
 using MyRestaurant.BusinessLogic.Models;
-using MyRestaurant.DataAccess.Models;
 using MyRestaurant.Presentation.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MyRestaurant.Presentation.Controllers
 {
     public class ProfileController : Controller
     {
         private readonly IUserProfileService _userProfile;
-        public ProfileController(IUserProfileService userProfile)
+        private readonly IMapper _mapper;
+
+        public ProfileController(IUserProfileService userProfile, IMapper mapper)
         {
             _userProfile = userProfile;
-        }
-        public IActionResult Index()
-        {
-            return View();
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -36,10 +30,9 @@ namespace MyRestaurant.Presentation.Controllers
         [HttpPost]
         public IActionResult Create([FromForm] UserProfileViewModel model)
         {
-            model.UserId = int.Parse(User.Identity.Name);
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<UserProfileViewModel, UserProfileModel>());
-            var mapper = new Mapper(config);
-            var mappedProfile = mapper.Map<UserProfileModel>(model);
+            var userId = int.Parse(User.Identity.Name);
+            var mappedProfile = _mapper.Map<UserProfileModel>(model);
+            mappedProfile.Id = userId;
             _userProfile.CreateProfile(mappedProfile);
             return RedirectToAction("Index", "Home");
         }
